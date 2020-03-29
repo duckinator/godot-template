@@ -1,0 +1,33 @@
+# Allow compute credits usage for collaborators and anything pushed to the
+# master, staging, and trying branches. (So bors can use them.)
+use_compute_credits: $CIRRUS_USER_COLLABORATOR == 'true' || $CIRRUS_BRANCH == 'master' || $CIRRUS_BRANCH == 'staging' || $CIRRUS_BRANCH == 'trying'
+
+
+#env:
+#  # API key available from https://itch.io/user/settings/api-keys
+#  BUTLER_API_KEY: ENCRYPTED[...]
+#  GITHUB_REPO: ""
+
+
+test_task:
+  container:
+    dockerfile: Dockerfile
+  install_script:
+    - make ci-setup
+  script:
+    - make test
+
+# TODO: Uncomment when ready for first release.
+#release_task:
+#  only_if: $BRANCH == 'master'
+#  depends_on:
+#    - test
+#  container:
+#    dockerfile: Dockerfile
+#  install_script:
+#    - make ci-setup
+#  script:
+#    - make release
+#    - butler push build/linux ${GITHUB_REPO}:linux
+#    - butler push build/windows ${GITHUB_REPO}:windows
+#    - butler push build/mac ${GITHUB_REPO}:mac

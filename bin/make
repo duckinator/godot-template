@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DIR=$(dirname $(dirname $(readlink -f $0))) # Directory one level up from this script.
+IMAGE_NAME=$(echo $DIR | sed 's/.*\///')-builder:latest
+
+if [ -z "${DOCKER_UID}" ]; then
+  DOCKER_UID=$UID
+fi
+
+if [ "$1" == "--build" ]; then
+  docker build -t $IMAGE_NAME .
+  exit $?
+fi
+
+# Use /tmp/cirrus-ci-build because that's what CI uses and I'm lazy.
+docker run --rm -it -v "$DIR:/tmp/cirrus-ci-build:z" -w /tmp/cirrus-ci-build -u $DOCKER_UID $IMAGE_NAME make "$@"

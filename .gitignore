@@ -1,0 +1,15 @@
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_presets.cfg
+
+# Mono-specific ignores
+.mono/
+
+/build/
+/bin/godot
+/bin/godot-headless
+/tmp
+
+src/build_info.json
